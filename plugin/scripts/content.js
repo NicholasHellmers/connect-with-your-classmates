@@ -3,12 +3,14 @@ function loadMoreUsers() {
     window.scrollTo(0,document.body.scrollHeight)
 }
 
-function addConnectionsButton() {
+function scanUsersButton() {
     // Get all the users
     console.log('Adding connections to users in view...')
-    let users = []
+    let users = [] // user array (cache)
+
     // Get the table first table element in the page
     var table = document.getElementsByTagName('table')[0]
+    
     // Append the users in the table to the users array
     for (var i = 1; i < table.rows.length; i++) {
         users.push({
@@ -16,9 +18,30 @@ function addConnectionsButton() {
             name: table.rows[i].cells[1].innerText,
             section: table.rows[i].cells[2].innerText,
             role: table.rows[i].cells[3].innerText,
-            // clicked: false
+            clicked: false
         });
     }
+
+    // Load users that are in local storage
+    // var users_in_storage = JSON.parse(localStorage.getItem('users')) || []
+    // var users_to_add = []
+
+    // Check if a user is in the users_in_storage if they are not, add them to the users_to_add
+    // for (var i = 0; i < users.length; i++) {
+    //     var user = users[i]
+    //     var user_in_storage = users_in_storage.find(function(u) {
+    //         return u.name == user.name
+    //     })
+    //     if (!user_in_storage) {
+    //         users_to_add.push(user)
+    //     }
+    // }
+
+    // Add the users to the users_in_storage
+    // users_in_storage = users_in_storage.concat(users_to_add)
+
+    // Save the users to local storage
+    // localStorage.setItem('users', JSON.stringify(users_in_storage))
     
     // If the actions column is not present, add it
     if (table.rows[0].cells.length < 6) {
@@ -34,14 +57,13 @@ function addConnectionsButton() {
             connection_button.innerHTML = 'Connect'
             connection_button.id = i
             connection_button.onclick = function() {
-                // Open a new tab to connect with the user
-                console.log('Connecting with user...')
-                // users[this.id].clicked = true
-                
-                // generate stirng to search for user which is the name but instead of spaces, it has '%20'
-                var user_to_search_string = users[this.id].name.split(' ').join('%20')
-                var url = 'https://www.linkedin.com/search/results/all/?keywords=' + user_to_search_string + '%20Boulder%20Colorado'
-                window.open(url, '_blank')
+                    // Open a new tab to connect with the user
+                    console.log('Connecting with user...')
+                    
+                    // generate stirng to search for user which is the name but instead of spaces, it has '%20'
+                    var user_to_search_string = users[this.id].name.split(' ').join('%20')
+                    var url = 'https://www.linkedin.com/search/results/all/?keywords=' + user_to_search_string + '%20Boulder%20Colorado'
+                    window.open(url, '_blank')
             }
 
             // Add styles to the buttons (match the linked in connection button style)
@@ -69,17 +91,15 @@ function addConnectionsButton() {
 
 // Add button after the form with the class 'form-dialog'
 setTimeout(function() {
-
-
     var form = document.getElementsByClassName('form-dialog')[0]
     var load_more_users = document.createElement('button')
-    load_more_users.innerHTML = 'Load more users'
+    load_more_users.innerHTML = 'Load More Users'
     load_more_users.onclick = loadMoreUsers
 
     // Add the button that will add the connection button to each user
-    add_connection_button = document.createElement('button')
-    add_connection_button.innerHTML = 'Add connections'
-    add_connection_button.onclick = addConnectionsButton
+    scan_users = document.createElement('button')
+    scan_users.innerHTML = 'Scan Users'
+    scan_users.onclick = scanUsersButton
 
     // Add styles to the buttons
     menu_button_style = {
@@ -93,13 +113,13 @@ setTimeout(function() {
 
     for (var key in menu_button_style) {
         load_more_users.style[key] = menu_button_style[key]
-        add_connection_button.style[key] = menu_button_style[key]
+        scan_users.style[key] = menu_button_style[key]
     }
 
     // Wrap the buttons in a div
     var button_div = document.createElement('div')
     button_div.appendChild(load_more_users)
-    button_div.appendChild(add_connection_button)
+    button_div.appendChild(scan_users)
 
     form.parentNode.insertBefore(button_div, form.nextSibling)
 }, 2000)
