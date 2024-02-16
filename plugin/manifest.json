@@ -3,6 +3,9 @@
     "name": "Connect with your peers",
     "version": "1.0",
     "description": "Add the reading time to Chrome Extension documentation articles",
+    "action": {
+        "default_popup": "index.html"
+    },
     "icons": {
       "16": "images/icon-16.png",
       "32": "images/icon-32.png",

@@ -32,7 +32,13 @@ function addConnectionsButton() {
             connection_button.innerHTML = 'Connect'
             connection_button.id = i
             connection_button.onclick = function() {
-                alert('Connecting to ' + users[this.id].name)
+                // Open a new tab to connect with the user
+                console.log('Connecting with user...')
+                var user_to_search = users[this.id]
+                // generate stirng to search for user which is the name but instead of spaces, it has '%20'
+                var user_to_search_string = user_to_search.name.split(' ').join('%20')
+                var url = 'https://www.linkedin.com/search/results/all/?keywords=' + user_to_search_string + '%20Boulder%20Colorado'
+                window.open(url, '_blank')
             }
             // Add the connection button to the user
             console.log(table.rows[i+1].cells.length)
@@ -44,6 +50,8 @@ function addConnectionsButton() {
 
 // Add button after the form with the class 'form-dialog'
 setTimeout(function() {
+
+
     var form = document.getElementsByClassName('form-dialog')[0]
     var load_more_users = document.createElement('button')
     load_more_users.innerHTML = 'Load more users'
@@ -54,7 +62,10 @@ setTimeout(function() {
     add_connection_button.innerHTML = 'Add connections'
     add_connection_button.onclick = addConnectionsButton
 
-    form.parentNode.insertBefore(load_more_users, form.nextSibling)
-    form.parentNode.insertBefore(add_connection_button, form.nextSibling)
-}, 2000)
+    // Wrap the buttons in a div
+    var button_div = document.createElement('div')
+    button_div.appendChild(load_more_users)
+    button_div.appendChild(add_connection_button)
 
+    form.parentNode.insertBefore(button_div, form.nextSibling)
+}, 2000)
