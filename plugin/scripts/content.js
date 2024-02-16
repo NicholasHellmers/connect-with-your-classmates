@@ -16,8 +16,10 @@ function addConnectionsButton() {
             name: table.rows[i].cells[1].innerText,
             section: table.rows[i].cells[2].innerText,
             role: table.rows[i].cells[3].innerText,
+            // clicked: false
         });
     }
+    
     // If the actions column is not present, add it
     if (table.rows[0].cells.length < 6) {
         new_table_header = document.createElement('th')
@@ -34,18 +36,35 @@ function addConnectionsButton() {
             connection_button.onclick = function() {
                 // Open a new tab to connect with the user
                 console.log('Connecting with user...')
-                var user_to_search = users[this.id]
+                // users[this.id].clicked = true
+                
                 // generate stirng to search for user which is the name but instead of spaces, it has '%20'
-                var user_to_search_string = user_to_search.name.split(' ').join('%20')
+                var user_to_search_string = users[this.id].name.split(' ').join('%20')
                 var url = 'https://www.linkedin.com/search/results/all/?keywords=' + user_to_search_string + '%20Boulder%20Colorado'
                 window.open(url, '_blank')
             }
+
+            // Add styles to the buttons (match the linked in connection button style)
+            connection_button_style = {
+                'margin': 'auto',
+                'padding': '6px 16px',
+                'border-radius': '15px',
+                'background-color': 'white',
+                'color': '#0A66C2',
+                'border': '1px solid #0A66C2',
+            }
+            
+            for (var key in connection_button_style) {
+                connection_button.style[key] = connection_button_style[key]
+            }
+            
             // Add the connection button to the user
             console.log(table.rows[i+1].cells.length)
             table.rows[i+1].insertCell(5)
             table.rows[i+1].cells[5].appendChild(connection_button)
         }
     }
+
 }
 
 // Add button after the form with the class 'form-dialog'
@@ -61,6 +80,21 @@ setTimeout(function() {
     add_connection_button = document.createElement('button')
     add_connection_button.innerHTML = 'Add connections'
     add_connection_button.onclick = addConnectionsButton
+
+    // Add styles to the buttons
+    menu_button_style = {
+        'margin': '10px',
+        'padding': '10px',
+        'border-radius': '15px',
+        'background-color': 'white',
+        'color': '#3d4a57',
+        'border': '1px solid #3d4a57',
+    }
+
+    for (var key in menu_button_style) {
+        load_more_users.style[key] = menu_button_style[key]
+        add_connection_button.style[key] = menu_button_style[key]
+    }
 
     // Wrap the buttons in a div
     var button_div = document.createElement('div')
