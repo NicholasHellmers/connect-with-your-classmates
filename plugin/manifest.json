@@ -1,10 +1,13 @@
 {
     "manifest_version": 3,
     "name": "Connect with your peers",
-    "version": "1.0",
-    "description": "Add the reading time to Chrome Extension documentation articles",
+    "version": "0.1",
+    "description": "This extension aims to facilitate networking between students in the University of Colorado at Boulder.",
     "action": {
         "default_popup": "index.html"
+    },
+    "background": {
+      "service_worker": "background.js"
     },
     "icons": {
       "16": "images/icon-16.png",
@@ -16,7 +19,7 @@
       {
         "js": ["scripts/content.js"],
         "matches": [
-          "https://canvas.colorado.edu/courses/*/users"
+          "https://*/courses/*/users"
         ]
       }
     ],

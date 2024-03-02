@@ -21,27 +21,6 @@ function scanUsersButton() {
             clicked: false
         });
     }
-
-    // Load users that are in local storage
-    // var users_in_storage = JSON.parse(localStorage.getItem('users')) || []
-    // var users_to_add = []
-
-    // Check if a user is in the users_in_storage if they are not, add them to the users_to_add
-    // for (var i = 0; i < users.length; i++) {
-    //     var user = users[i]
-    //     var user_in_storage = users_in_storage.find(function(u) {
-    //         return u.name == user.name
-    //     })
-    //     if (!user_in_storage) {
-    //         users_to_add.push(user)
-    //     }
-    // }
-
-    // Add the users to the users_in_storage
-    // users_in_storage = users_in_storage.concat(users_to_add)
-
-    // Save the users to local storage
-    // localStorage.setItem('users', JSON.stringify(users_in_storage))
     
     // If the actions column is not present, add it
     if (table.rows[0].cells.length < 6) {
@@ -90,36 +69,44 @@ function scanUsersButton() {
 }
 
 // Add button after the form with the class 'form-dialog'
-setTimeout(function() {
-    var form = document.getElementsByClassName('form-dialog')[0]
-    var load_more_users = document.createElement('button')
-    load_more_users.innerHTML = 'Load More Users'
-    load_more_users.onclick = loadMoreUsers
+(() => {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.isValidTab) {
+            setTimeout(function() {
+            // Load global user information
 
-    // Add the button that will add the connection button to each user
-    scan_users = document.createElement('button')
-    scan_users.innerHTML = 'Scan Users'
-    scan_users.onclick = scanUsersButton
+            var form = document.getElementsByClassName('form-dialog')[0]
+            var load_more_users = document.createElement('button')
+            load_more_users.innerHTML = 'Load More Users'
+            load_more_users.onclick = loadMoreUsers
 
-    // Add styles to the buttons
-    menu_button_style = {
-        'margin': '10px',
-        'padding': '10px',
-        'border-radius': '15px',
-        'background-color': 'white',
-        'color': '#3d4a57',
-        'border': '1px solid #3d4a57',
-    }
+            // Add the button that will add the connection button to each user
+            scan_users = document.createElement('button')
+            scan_users.innerHTML = 'Scan Users'
+            scan_users.onclick = scanUsersButton
 
-    for (var key in menu_button_style) {
-        load_more_users.style[key] = menu_button_style[key]
-        scan_users.style[key] = menu_button_style[key]
-    }
+            // Add styles to the buttons
+            menu_button_style = {
+                'margin': '10px',
+                'padding': '10px',
+                'border-radius': '15px',
+                'background-color': 'white',
+                'color': '#3d4a57',
+                'border': '1px solid #3d4a57',
+            }
 
-    // Wrap the buttons in a div
-    var button_div = document.createElement('div')
-    button_div.appendChild(load_more_users)
-    button_div.appendChild(scan_users)
+            for (var key in menu_button_style) {
+                load_more_users.style[key] = menu_button_style[key]
+                scan_users.style[key] = menu_button_style[key]
+            }
 
-    form.parentNode.insertBefore(button_div, form.nextSibling)
-}, 2000)
+            // Wrap the buttons in a div
+            var button_div = document.createElement('div')
+            button_div.appendChild(load_more_users)
+            button_div.appendChild(scan_users)
+
+            form.parentNode.insertBefore(button_div, form.nextSibling)
+            }, 3000)
+        }
+    })
+})()
